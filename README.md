@@ -1,79 +1,86 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+Introduction
+------------
 
-# Getting Started
+This is a React Native project that displays a list of users and their associated albums. The project uses the `react-native` library to create a native mobile app, and the `redux` library to manage application state.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+Components
+------------
 
-## Step 1: Start the Metro Server
+The following components are used in the project:
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+* `Section`: A component that wraps the `Text` component and displays a title and description.
+* `UserList`: A component that displays a list of users.
+* `PhotoGrid`: A component that displays an album of photos.
 
-To start Metro, run the following command from the _root_ of your React Native project:
+Functions
+------------
 
-```bash
-# using npm
-npm start
+The following functions are defined in the project:
 
-# OR using Yarn
-yarn start
-```
+* `fetchUsersAsync`: An asynchronous function that fetches a list of users from an API.
+* `fetchAlbumsAsync`: An asynchronous function that fetches a list of albums for each user from an API.
+* `setUserList`: A reducer function that sets the `users` state to the list of users returned by the `fetchUsersAsync` function.
+* `setUserAlbums`: A reducer function that sets the `albums` state to the list of albums returned by the `fetchAlbumsAsync` function for each user.
 
-## Step 2: Start your Application
+Reducers
+------------
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+The following reducers are defined in the project:
 
-### For Android
+* `usersReducer`: A reducer function that handles state for the list of users.
+* `albumsReducer`: A reducer function that handles state for the list of albums.
 
-```bash
-# using npm
-npm run android
+Store
+-------
 
-# OR using Yarn
-yarn android
-```
+The project uses the `configureStore` function from the `reduxjs` library to create a store with the following reducers:
 
-### For iOS
+* `usersReducer`: A reducer function that handles state for the list of users.
+* `albumsReducer`: A reducer function that handles state for the list of albums.
 
-```bash
-# using npm
-npm run ios
+Thunks
+-------
 
-# OR using Yarn
-yarn ios
-```
+The project defines the following thunks:
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+* `fetchUsersAsync`: An asynchronous thunk that fetches a list of users from an API.
+* `fetchAlbumsAsync`: An asynchronous thunk that fetches a list of albums for each user from an API.
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+* `fetchAllPhotosAsync`: An asynchronous thunk that fetches a list of photos for all albums from an API.
+* `fetchPhotosByAlbumIdAsync`: An asynchronous thunk that fetches a list of photos for a specific album from an API.
 
-## Step 3: Modifying your App
 
-Now that you have successfully run the app, let's modify it.
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+Actions
+----------
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+The project defines the following actions:
 
-## Congratulations! :tada:
+* `setUserList`: An action that sets the `users` state to the list of users returned by the `fetchUsersAsync` function.
+* `setUserAlbums`: An action that sets the `albums` state to the list of albums returned by the `fetchAlbumsAsync` function for each user.
+* `setAllPhotos`: An action that sets the `allphotos` state to the list of photos returned by the `fetchAllPhotosAsync` function.
+* `setCurrentAlbum`: An action that sets the `currentAlbum` state to the album returned by the `fetchPhotosByAlbumIdAsync` function.
+* `toggleDisplayMode`: An action that toggles the display mode of the photos (whether to show all photos or the current album).
 
-You've successfully run and modified your React Native App. :partying_face:
 
-### Now what?
+Selectors
+------------
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+The project defines the following selectors:
 
-# Troubleshooting
+* `selectUsers`: A selector that returns the list of users.
+* `selectUserAlbums`: A selector that returns the list of albums for each user.
+* `selectAllPhotos`: A selector that returns the list of photos for all albums.
+* `selectCurrentAlbum`: A selector that returns the album currently being displayed.
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+App
+------
 
-# Learn More
+The project exports a single component, `App`, which renders the `Section` component with the `UserList` and `PhotoGrid` components as children. The `App` component also uses the `store` function to create a store with the `usersReducer` and `albumsReducer` 
+reducers.
 
-To learn more about React Native, take a look at the following resources:
+Conclusion
+----------
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+This project is a basic example of how to use React Native and Redux together to build a mobile app that displays a list of users and their associated albums. Of course, this is just the tip of the iceberg when it comes to building complex applications with React 
+Native and Redux, but hopefully this documentation will give you a good starting point for your own project.
