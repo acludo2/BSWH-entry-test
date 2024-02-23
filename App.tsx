@@ -67,7 +67,6 @@ function Section({ children, title }: SectionProps): React.JSX.Element {
 }
 
 
-const Quick = () => (<View><Text>what up</Text></View>)
 
 
 function App(): React.JSX.Element {
@@ -90,7 +89,6 @@ function App(): React.JSX.Element {
 
   return (
     <Provider store={store}>
-      <Quick />
       <NavigationContainer>
         <Stack.Navigator  
           screenOptions={{

@@ -1,17 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, requireNativeComponent, NativeModules } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchPhotosByAlbumIdAsync, selectCurrentAlbum, selectAllPhotos, toggleDisplayMode, fetchAllPhotosAsync } from './photosReducer';
-import { RootState } from '../../store/store';
 import { AlbumPhotos } from '../../store/types';
-import { useNavigation } from '@react-navigation/native';
-import { all } from 'axios';
+import styles from "./styles"
 
 
 interface Props {
 }
 
+
+/* 
+const { SnapshotModule } = NativeModules;
+console.log("snpashot",NativeModules)
+
+//@ts-ignore
+const captureSnapshot = (viewTag) => {
+    console.log("snpashot",NativeModules)
+    //@ts-ignore
+    SnapshotModule.snapshot(viewTag, (base64String) => {
+        console.log('Base64 string:', base64String);
+        // Handle the base64 string
+    });
+};
+
+ */
+
 const PhotoGrid: React.FC<Props> = ({ navigation, route }: any) => {
+    const viewRef = useRef(null);
+
     const dispatch = useDispatch();
     const photos = useSelector(selectCurrentAlbum);
     const allPhotos = useSelector(selectAllPhotos);
@@ -38,9 +55,14 @@ const PhotoGrid: React.FC<Props> = ({ navigation, route }: any) => {
         );
     }
 
+ 
     return (
-        <View style={styles.container}>
+        //@ts-ignore
+        <View ref={viewRef} style={styles.container}>
             <View style={styles.header}>
+                <TouchableOpacity onPress={()=>{navigation.goBack()}} style={styles.startButton}>
+                    <Text style={styles.startButtonText}>Back</Text>
+                </TouchableOpacity>
                 <Text style={styles.headerText}>Photos</Text>
                 <TouchableOpacity onPress={togglePhotosView} style={styles.startButton}>
                     <Text style={styles.startButtonText}>*</Text>
@@ -56,43 +78,5 @@ const PhotoGrid: React.FC<Props> = ({ navigation, route }: any) => {
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    },
-    headerText: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    startButton: {
-        backgroundColor: 'blue',
-        padding: 10,
-        borderRadius: 5,
-    },
-    startButtonText: {
-        color: '#fff',
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    photoItem: {
-        flex: 1,
-        margin: 2,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    image: {
-        width: 100,
-        height: 100,
-    },
-});
 
 export default PhotoGrid;

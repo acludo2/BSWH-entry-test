@@ -5,7 +5,7 @@ import { AlbumsState, AlbumPhotos } from '../../store/types';
 
 export const initialState: AlbumsState = {
     allphotos: [],
-    isAllPhotos: false,
+    isAllPhotos: true,
     currentAlbum: []
 }
 

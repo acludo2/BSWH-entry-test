@@ -1,9 +1,10 @@
-import React, { useEffect, useState,useRef } from 'react';
-import { View, Text, ActivityIndicator, FlatList, StyleSheet, TouchableOpacity, Animated } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, ActivityIndicator, FlatList, TouchableOpacity, Animated } from 'react-native';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { fetchUsersAsync, selectUsers, fetchAlbumsAsync, selectUserAlbums } from './usersReducer'; // Import your slice
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
+import styles from './ styles';
 
 
 const UserList: React.FC = () => {
@@ -48,17 +49,28 @@ const UserList: React.FC = () => {
             extrapolate: 'clamp',
         });
 
-        const handlePress = () => {
-            toggleUser(item.id);
-            Animated.timing(animatedHeights.current[item.id], {
-                toValue: isUserExpanded(item.id) ? 1 : 0,
+        const handlePress = async () => {
+            const nextExpandedUsers = [...expandedUsers]; // Create a new array to avoid mutating state directly
+            const userId = item.id;
+            
+            if (expandedUsers.includes(userId)) {
+                nextExpandedUsers.splice(nextExpandedUsers.indexOf(userId), 1); // Remove userId if already expanded
+            } else {
+                nextExpandedUsers.push(userId); // Add userId if not expanded
+            }
+        
+            setExpandedUsers(nextExpandedUsers); // Update the state
+        
+            await Animated.timing(animatedHeights.current[userId], {
+                toValue: nextExpandedUsers.includes(userId) ? 1 : 0,
                 duration: 300,
                 useNativeDriver: false,
             }).start();
         };
+        
 
         return (
-            <View style={{flex:1,flexDirection:"column"}}>
+            <View style={{ flex: 1, flexDirection: "column" }}>
                 <TouchableOpacity onPress={handlePress}>
                     <View style={styles.userNameContainer}>
                         <Text style={styles.userName}>{item.name}</Text>
@@ -67,12 +79,12 @@ const UserList: React.FC = () => {
                 <Animated.View style={{ height: expandHeight, overflow: 'hidden' }}>
                     {itemAlbums && itemAlbums.albums.length > 0 ? (
                         <FlatList
-                        style={{ overflow: "visible" }}
+                            style={{ overflow: "visible" }}
 
                             data={itemAlbums.albums}
                             renderItem={({ item }) => (
                                 //@ts-ignore
-                                <TouchableOpacity onPress={()=>{navigation.navigate('Album', {userId:item.userId})}}  style={styles.albumContainer}>
+                                <TouchableOpacity onPress={() => { navigation.navigate('Album', { userId: item.id }) }} style={styles.albumContainer}>
                                     <View style={styles.divider} />
                                     <Text style={styles.albumTitle}>{item.title}</Text>
                                 </TouchableOpacity>
@@ -86,51 +98,22 @@ const UserList: React.FC = () => {
     };
 
     return (
-        <View style={{flex:1}} >
+        <View style={{ flex: 1 }} >
             {status === 'loading' ? (
                 <ActivityIndicator size="large" color="#0000ff" />
             ) : (
                 <FlatList
-                style={{ overflow: "visible" }}
+                    style={{ overflow: "visible" }}
                     data={users}
                     renderItem={renderUserItem}
                     keyExtractor={(item) => item.id.toString()}
-                   
+
                 />
             )}
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        backgroundColor: '#FFFFFF',
-    },
-    userNameContainer: {
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        backgroundColor: '#F0F0F0',
-    },
-    userName: {
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    albumContainer: {
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        backgroundColor: '#FFFFFF',
-    },
-    albumTitle: {
-        fontSize: 14,
-        fontWeight: '400',
-    },
-    divider: {
-        height: 1,
-        backgroundColor: '#ECECEC',
-        marginTop: 8,
-    },
-});
 
 
 export default UserList;
