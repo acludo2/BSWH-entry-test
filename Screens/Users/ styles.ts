@@ -17,8 +17,11 @@ const styles = StyleSheet.create({
     },
     albumContainer: {
         paddingVertical: 12,
-        paddingHorizontal: 16,
+        paddingHorizontal: 26,
         backgroundColor: '#FFFFFF',
+        alignContent:"flex-end",
+        justifyContent:"flex-end",
+        alignItems:"flex-end"
     },
     albumTitle: {
         fontSize: 14,

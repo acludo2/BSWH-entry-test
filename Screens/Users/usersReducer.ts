@@ -45,6 +45,17 @@ export const usersSlice = createSlice({
       const { userId, albums } = action.payload;
       state.albums.push({ userId: userId, albums: albums })
     },
+    toggleAlbumHiddenState: (state, action: PayloadAction<{ userId: number; albumId: number }>) => {
+      const { userId, albumId } = action.payload;
+      const userAlbums = state.albums.find(user => user.userId === userId);
+      if (userAlbums) {
+        const albumIndex = userAlbums.albums.findIndex(album => album.id === albumId);
+        if (albumIndex !== -1) {
+          //@ts-ignore
+          userAlbums.albums[albumIndex].ishidden = !userAlbums.albums[albumIndex].ishidden;
+        }
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -59,7 +70,7 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { setUserList, setUserAlbums } = usersSlice.actions;
+export const { setUserList, setUserAlbums,toggleAlbumHiddenState } = usersSlice.actions;
 
 export const selectUsers = (state: RootState) => state.users.users;
 
